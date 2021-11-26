@@ -1,0 +1,19 @@
+overwrite: true
+schema: "src/api/schema.graphql"
+documents: "src/api/queries/*.ts"
+generates:
+  src/types/generated/types.ts:
+    plugins:
+      - typescript
+  src/:
+    preset: near-operation-file
+    presetConfig:
+      extension: .generated.tsx
+      baseTypesPath: types/generated/types.ts
+    config:
+      reactApolloVersion: 3
+      withHooks: true
+    plugins:
+      - add:
+          content: '/* eslint no-shadow: 0 */'
+      - "typescript-operations"
