@@ -1,23 +1,26 @@
 import type { GetServerSideProps, NextPage } from "next";
-import Head from "next/head";
 import createApolloClient from "@/api/apollo";
-import { Button } from "@mui/material";
-import { Link } from "@/components/atoms/Link";
+
+import { Typography } from "@mui/material";
 
 import { GetAllPostsWithSlugQuery } from "@/api/queries/queries.generated";
 import { ALL_POSTS_WITH_SLUG_QUERY } from "@/api/queries/queries";
 
-const Home: NextPage = () => {
+import { Layout } from "@/components/Layout";
+
+interface Props extends GetAllPostsWithSlugQuery {
+  preview: boolean;
+}
+
+const Home: NextPage<Props> = (props) => {
+  const { preview, posts } = props;
+
+  console.log(preview, posts);
+
   return (
-    <div>
-      <Head>
-        <title>My page</title>
-        <meta name="viewport" content="initial-scale=1, width=device-width" />
-      </Head>
-      <Button component={Link} href={"/about"}>
-        HELLO GITL
-      </Button>
-    </div>
+    <Layout preview={preview}>
+      <Typography>HOME PAGE</Typography>
+    </Layout>
   );
 };
 

@@ -22,12 +22,14 @@ module.exports = {
     "prettier",
   ],
   rules: {
-    "no-shadow": "error",
+    "no-shadow": "off",
     "prefer-const": "warn",
     "no-console": "warn",
     "@typescript-eslint/no-unused-vars": [2, { argsIgnorePattern: "^_" }],
     "@typescript-eslint/no-var-requires": "off",
     "@typescript-eslint/no-explicit-any": "off",
+    '@typescript-eslint/no-empty-function': "off",
     "@typescript-eslint/no-use-before-define": [1],
+    '@typescript-eslint/no-shadow': "error"
   },
 };

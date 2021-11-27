@@ -2,11 +2,10 @@ import * as React from "react";
 import { useRouter } from "next/router";
 import { LinkProps as NextLinkProps } from "next/dist/client/link";
 import { Link as MuiLink, LinkProps as MuiLinkProps } from "@mui/material";
+
 import clsx from "clsx";
-import {
-  NextLinkComposed,
-  NextLinkComposedProps,
-} from "@/components/atoms/Link/NextLinkComposed";
+
+import { NextLinkComposed, NextLinkComposedProps } from "./NextLinkComposed";
 
 export type LinkProps = {
   activeClassName?: string;

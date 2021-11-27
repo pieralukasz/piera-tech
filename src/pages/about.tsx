@@ -1,20 +1,30 @@
-import { NextPage } from "next";
-import Head from "next/head";
-import { Button } from "@mui/material";
-import { Link } from "@/components/atoms/Link";
+import { GetServerSideProps, NextPage } from "next";
+import { Typography } from "@mui/material";
 
-const About: NextPage = () => {
+import { Layout } from "@/components/Layout";
+
+interface Props {
+  preview: boolean;
+}
+
+const About: NextPage<Props> = (props) => {
+  const { preview } = props;
+
   return (
-    <div>
-      <Head>
-        <title>About Me</title>
-        <meta name="viewport" content="initial-scale=1, width=device-width" />
-      </Head>
-      <Button component={Link} href={"/"}>
-        HELLO About
-      </Button>
-    </div>
+    <Layout preview={preview}>
+      <Typography>ABOUT PAGE</Typography>
+    </Layout>
   );
 };
 
 export default About;
+
+export const getServerSideProps: GetServerSideProps = async ({
+  preview = false,
+}) => {
+  return {
+    props: {
+      preview,
+    },
+  };
+};
