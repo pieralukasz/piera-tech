@@ -1,6 +1,5 @@
 import React, { createContext, useCallback, useMemo, useState } from "react";
 import {
-  createTheme,
   CssBaseline,
   PaletteMode,
   Theme,
@@ -14,12 +13,17 @@ export interface ThemeContextValue {
   toggleColorMode(): void;
 }
 
-export const ThemeContext = createContext<ThemeContextValue>({
-  theme: createTheme(),
-  toggleColorMode() {},
-});
+export const ThemeContext = createContext<ThemeContextValue | undefined>(
+  undefined
+);
 
-const ThemeProvider: React.FC = ({ children }) => {
+interface ThemeProviderProps {
+  initialTheme?: Theme;
+}
+
+const ThemeProvider: React.FC<ThemeProviderProps> = (props) => {
+  const { children, initialTheme } = props;
+
   const [mode, setMode] = useState<PaletteMode>("light");
 
   // TODO maybe add this later
@@ -41,7 +45,7 @@ const ThemeProvider: React.FC = ({ children }) => {
 
   return (
     <ThemeContext.Provider value={value}>
-      <MuiThemeProvider theme={theme}>
+      <MuiThemeProvider theme={initialTheme || theme}>
         <CssBaseline />
         {children}
       </MuiThemeProvider>

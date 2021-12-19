@@ -13,7 +13,7 @@ interface Node {
     stage: Stage!
 }
 
-union ScheduledOperationAffectedDocument = Asset | Author | Page | Post | Seo
+union ScheduledOperationAffectedDocument = Asset | Author | Page | Post | Seo | Tag
 
 union SeoParent = Page | Post
 
@@ -396,6 +396,8 @@ type Mutation {
     createScheduledRelease(data: ScheduledReleaseCreateInput!): ScheduledRelease
     "Create one seo"
     createSeo(data: SeoCreateInput!): Seo
+    "Create one tag"
+    createTag(data: TagCreateInput!): Tag
     "Delete one asset from _all_ existing stages. Returns deleted document."
     deleteAsset(
         "Document to delete"
@@ -481,6 +483,21 @@ type Mutation {
         "Documents to delete"
         where: SeoManyWhereInput
     ): SeoConnection!
+    "Delete many Tag documents"
+    deleteManyTags(
+        "Documents to delete"
+        where: TagManyWhereInput
+    ): BatchPayload! @deprecated(reason : "Please use the new paginated many mutation (deleteManyTagsConnection)")
+    "Delete many Tag documents, return deleted documents"
+    deleteManyTagsConnection(
+        after: ID,
+        before: ID,
+        first: Int,
+        last: Int,
+        skip: Int,
+        "Documents to delete"
+        where: TagManyWhereInput
+    ): TagConnection!
     "Delete one page from _all_ existing stages. Returns deleted document."
     deletePage(
         "Document to delete"
@@ -506,6 +523,11 @@ type Mutation {
         "Document to delete"
         where: SeoWhereUniqueInput!
     ): Seo
+    "Delete one tag from _all_ existing stages. Returns deleted document."
+    deleteTag(
+        "Document to delete"
+        where: TagWhereUniqueInput!
+    ): Tag
     "Publish one asset"
     publishAsset(
         "Optional localizations to publish"
@@ -643,6 +665,27 @@ type Mutation {
         "Identifies documents in each stage to be published"
         where: SeoManyWhereInput
     ): SeoConnection!
+    "Publish many Tag documents"
+    publishManyTags(
+        "Stages to publish documents to"
+        to: [Stage!]! = [PUBLISHED],
+        "Identifies documents in each stage to be published"
+        where: TagManyWhereInput
+    ): BatchPayload! @deprecated(reason : "Please use the new paginated many mutation (publishManyTagsConnection)")
+    "Publish many Tag documents"
+    publishManyTagsConnection(
+        after: ID,
+        before: ID,
+        first: Int,
+        "Stage to find matching documents in"
+        from: Stage = DRAFT,
+        last: Int,
+        skip: Int,
+        "Stages to publish documents to"
+        to: [Stage!]! = [PUBLISHED],
+        "Identifies documents in each stage to be published"
+        where: TagManyWhereInput
+    ): TagConnection!
     "Publish one page"
     publishPage(
         "Publishing target stage"
@@ -664,6 +707,13 @@ type Mutation {
         "Document to publish"
         where: SeoWhereUniqueInput!
     ): Seo
+    "Publish one tag"
+    publishTag(
+        "Publishing target stage"
+        to: [Stage!]! = [PUBLISHED],
+        "Document to publish"
+        where: TagWhereUniqueInput!
+    ): Tag
     "Schedule to publish one asset"
     schedulePublishAsset(
         "Optional localizations to publish"
@@ -725,6 +775,17 @@ type Mutation {
         "Document to publish"
         where: SeoWhereUniqueInput!
     ): Seo
+    "Schedule to publish one tag"
+    schedulePublishTag(
+        "Release at point in time, will create new release containing this operation"
+        releaseAt: DateTime,
+        "Optionally attach this scheduled operation to an existing release"
+        releaseId: String,
+        "Publishing target stage"
+        to: [Stage!]! = [PUBLISHED],
+        "Document to publish"
+        where: TagWhereUniqueInput!
+    ): Tag
     "Unpublish one asset from selected stages. Unpublish either the complete document with its relations, localizations and base data or specific localizations only."
     scheduleUnpublishAsset(
         "Stages to unpublish document from"
@@ -784,6 +845,17 @@ type Mutation {
         "Document to unpublish"
         where: SeoWhereUniqueInput!
     ): Seo
+    "Unpublish one tag from selected stages. Unpublish either the complete document with its relations, localizations and base data or specific localizations only."
+    scheduleUnpublishTag(
+        "Stages to unpublish document from"
+        from: [Stage!]! = [PUBLISHED],
+        "Release at point in time, will create new release containing this operation"
+        releaseAt: DateTime,
+        "Optionally attach this scheduled operation to an existing release"
+        releaseId: String,
+        "Document to unpublish"
+        where: TagWhereUniqueInput!
+    ): Tag
     "Unpublish one asset from selected stages. Unpublish either the complete document with its relations, localizations and base data or specific localizations only."
     unpublishAsset(
         "Stages to unpublish document from"
@@ -915,6 +987,27 @@ type Mutation {
         "Identifies documents in draft stage"
         where: SeoManyWhereInput
     ): SeoConnection!
+    "Unpublish many Tag documents"
+    unpublishManyTags(
+        "Stages to unpublish documents from"
+        from: [Stage!]! = [PUBLISHED],
+        "Identifies documents in each stage"
+        where: TagManyWhereInput
+    ): BatchPayload! @deprecated(reason : "Please use the new paginated many mutation (unpublishManyTagsConnection)")
+    "Find many Tag documents that match criteria in specified stage and unpublish from target stages"
+    unpublishManyTagsConnection(
+        after: ID,
+        before: ID,
+        first: Int,
+        "Stages to unpublish documents from"
+        from: [Stage!]! = [PUBLISHED],
+        last: Int,
+        skip: Int,
+        "Stage to find matching documents in"
+        stage: Stage = DRAFT,
+        "Identifies documents in draft stage"
+        where: TagManyWhereInput
+    ): TagConnection!
     "Unpublish one page from selected stages. Unpublish either the complete document with its relations, localizations and base data or specific localizations only."
     unpublishPage(
         "Stages to unpublish document from"
@@ -936,6 +1029,13 @@ type Mutation {
         "Document to unpublish"
         where: SeoWhereUniqueInput!
     ): Seo
+    "Unpublish one tag from selected stages. Unpublish either the complete document with its relations, localizations and base data or specific localizations only."
+    unpublishTag(
+        "Stages to unpublish document from"
+        from: [Stage!]! = [PUBLISHED],
+        "Document to unpublish"
+        where: TagWhereUniqueInput!
+    ): Tag
     "Update one asset"
     updateAsset(data: AssetUpdateInput!, where: AssetWhereUniqueInput!): Asset
     "Update one author"
@@ -1035,6 +1135,25 @@ type Mutation {
         "Documents to apply update on"
         where: SeoManyWhereInput
     ): SeoConnection!
+    "Update many tags"
+    updateManyTags(
+        "Updates to document content"
+        data: TagUpdateManyInput!,
+        "Documents to apply update on"
+        where: TagManyWhereInput
+    ): BatchPayload! @deprecated(reason : "Please use the new paginated many mutation (updateManyTagsConnection)")
+    "Update many Tag documents"
+    updateManyTagsConnection(
+        after: ID,
+        before: ID,
+        "Updates to document content"
+        data: TagUpdateManyInput!,
+        first: Int,
+        last: Int,
+        skip: Int,
+        "Documents to apply update on"
+        where: TagManyWhereInput
+    ): TagConnection!
     "Update one page"
     updatePage(data: PageUpdateInput!, where: PageWhereUniqueInput!): Page
     "Update one post"
@@ -1043,6 +1162,8 @@ type Mutation {
     updateScheduledRelease(data: ScheduledReleaseUpdateInput!, where: ScheduledReleaseWhereUniqueInput!): ScheduledRelease
     "Update one seo"
     updateSeo(data: SeoUpdateInput!, where: SeoWhereUniqueInput!): Seo
+    "Update one tag"
+    updateTag(data: TagUpdateInput!, where: TagWhereUniqueInput!): Tag
     "Upsert one asset"
     upsertAsset(upsert: AssetUpsertInput!, where: AssetWhereUniqueInput!): Asset
     "Upsert one author"
@@ -1053,6 +1174,8 @@ type Mutation {
     upsertPost(upsert: PostUpsertInput!, where: PostWhereUniqueInput!): Post
     "Upsert one seo"
     upsertSeo(upsert: SeoUpsertInput!, where: SeoWhereUniqueInput!): Seo
+    "Upsert one tag"
+    upsertTag(upsert: TagUpsertInput!, where: TagWhereUniqueInput!): Tag
 }
 
 type Page implements Node {
@@ -1309,8 +1432,26 @@ type Post implements Node {
     slug: String!
     "System stage field"
     stage: Stage!
-    "Add any relevant tags to this blog post"
-    tags: [String!]!
+    "Tags used in the post"
+    tags(
+        after: String,
+        before: String,
+        first: Int,
+        last: Int,
+        """
+
+        Allows to optionally override locale filtering behaviour in the query's subtree.
+
+        Note that `tags` is a model without localized fields and will not be affected directly by this argument, however the locales will be passed on to any relational fields in the query's subtree for filtering.
+        For related models with localized fields in the query's subtree, the first locale matching the provided list of locales will be returned, entries with non matching locales will be filtered out.
+
+        This argument will overwrite any existing locale filtering defined in the query's tree for the subtree.
+        """
+        locales: [Locale!],
+        orderBy: TagOrderByInput,
+        skip: Int,
+        where: TagWhereInput
+    ): [Tag!]!
     "Name your blog post!"
     title: String!
     "The time the document was updated"
@@ -1773,6 +1914,65 @@ type Query {
         stage: Stage! = PUBLISHED,
         where: SeoWhereInput
     ): SeoConnection!
+    "Retrieve a single tag"
+    tag(
+        """
+
+        Defines which locales should be returned.
+
+        Note that `Tag` is a model without localized fields and will not be affected directly by this argument, however the locales will be passed on to any relational fields in the query's subtree for filtering.
+        For related models with localized fields in the query's subtree, the first locale matching the provided list of locales will be returned, entries with non matching locales will be filtered out.
+
+        This argument may be overwritten by another locales definition in a relational child field, this will effectively use the overwritten argument for the affected query's subtree.
+        """
+        locales: [Locale!]! = [en],
+        stage: Stage! = PUBLISHED,
+        where: TagWhereUniqueInput!
+    ): Tag
+    "Retrieve document version"
+    tagVersion(where: VersionWhereInput!): DocumentVersion
+    "Retrieve multiple tags"
+    tags(
+        after: String,
+        before: String,
+        first: Int,
+        last: Int,
+        """
+
+        Defines which locales should be returned.
+
+        Note that `Tag` is a model without localized fields and will not be affected directly by this argument, however the locales will be passed on to any relational fields in the query's subtree for filtering.
+        For related models with localized fields in the query's subtree, the first locale matching the provided list of locales will be returned, entries with non matching locales will be filtered out.
+
+        This argument may be overwritten by another locales definition in a relational child field, this will effectively use the overwritten argument for the affected query's subtree.
+        """
+        locales: [Locale!]! = [en],
+        orderBy: TagOrderByInput,
+        skip: Int,
+        stage: Stage! = PUBLISHED,
+        where: TagWhereInput
+    ): [Tag!]!
+    "Retrieve multiple tags using the Relay connection interface"
+    tagsConnection(
+        after: String,
+        before: String,
+        first: Int,
+        last: Int,
+        """
+
+        Defines which locales should be returned.
+
+        Note that `Tag` is a model without localized fields and will not be affected directly by this argument, however the locales will be passed on to any relational fields in the query's subtree for filtering.
+        For related models with localized fields in the query's subtree, the first locale matching the provided list of locales will be returned, entries with non matching locales will be filtered out.
+
+        This argument may be overwritten by another locales definition in a relational child field, this will effectively use the overwritten argument for the affected query's subtree.
+        """
+        locales: [Locale!]! = [en],
+        orderBy: TagOrderByInput,
+        skip: Int,
+        stage: Stage! = PUBLISHED,
+        where: TagWhereInput
+    ): TagConnection!
     "Retrieve a single user"
     user(
         """
@@ -2217,6 +2417,133 @@ type SeoEdge {
     node: Seo!
 }
 
+"Tags used in the posts"
+type Tag implements Node {
+    "Tag Color"
+    color: Color
+    "The time the document was created"
+    createdAt: DateTime!
+    "User that created this document"
+    createdBy(
+        """
+
+        Allows to optionally override locale filtering behaviour in the query's subtree.
+
+        Note that `createdBy` is a model without localized fields and will not be affected directly by this argument, however the locales will be passed on to any relational fields in the query's subtree for filtering.
+        For related models with localized fields in the query's subtree, the first locale matching the provided list of locales will be returned, entries with non matching locales will be filtered out.
+
+        This argument will overwrite any existing locale filtering defined in the query's tree for the subtree.
+        """
+        locales: [Locale!]
+    ): User
+    "Get the document in other stages"
+    documentInStages(
+        "Decides if the current stage should be included or not"
+        includeCurrent: Boolean! = false,
+        "Decides if the documents should match the parent documents locale or should use the fallback order defined in the tree"
+        inheritLocale: Boolean! = false,
+        "Potential stages that should be returned"
+        stages: [Stage!]! = [DRAFT, PUBLISHED]
+    ): [Tag!]!
+    "List of Tag versions"
+    history(
+        limit: Int! = 10,
+        skip: Int! = 0,
+        "This is optional and can be used to fetch the document version history for a specific stage instead of the current one"
+        stageOverride: Stage
+    ): [Version!]!
+    "The unique identifier"
+    id: ID!
+    "Tag name"
+    name: String!
+    posts(
+        after: String,
+        before: String,
+        first: Int,
+        last: Int,
+        """
+
+        Allows to optionally override locale filtering behaviour in the query's subtree.
+
+        Note that `posts` is a model without localized fields and will not be affected directly by this argument, however the locales will be passed on to any relational fields in the query's subtree for filtering.
+        For related models with localized fields in the query's subtree, the first locale matching the provided list of locales will be returned, entries with non matching locales will be filtered out.
+
+        This argument will overwrite any existing locale filtering defined in the query's tree for the subtree.
+        """
+        locales: [Locale!],
+        orderBy: PostOrderByInput,
+        skip: Int,
+        where: PostWhereInput
+    ): [Post!]!
+    "The time the document was published. Null on documents in draft stage."
+    publishedAt: DateTime
+    "User that last published this document"
+    publishedBy(
+        """
+
+        Allows to optionally override locale filtering behaviour in the query's subtree.
+
+        Note that `publishedBy` is a model without localized fields and will not be affected directly by this argument, however the locales will be passed on to any relational fields in the query's subtree for filtering.
+        For related models with localized fields in the query's subtree, the first locale matching the provided list of locales will be returned, entries with non matching locales will be filtered out.
+
+        This argument will overwrite any existing locale filtering defined in the query's tree for the subtree.
+        """
+        locales: [Locale!]
+    ): User
+    scheduledIn(
+        after: String,
+        before: String,
+        first: Int,
+        last: Int,
+        """
+
+        Allows to optionally override locale filtering behaviour in the query's subtree.
+
+        Note that `scheduledIn` is a model without localized fields and will not be affected directly by this argument, however the locales will be passed on to any relational fields in the query's subtree for filtering.
+        For related models with localized fields in the query's subtree, the first locale matching the provided list of locales will be returned, entries with non matching locales will be filtered out.
+
+        This argument will overwrite any existing locale filtering defined in the query's tree for the subtree.
+        """
+        locales: [Locale!],
+        skip: Int,
+        where: ScheduledOperationWhereInput
+    ): [ScheduledOperation!]!
+    "System stage field"
+    stage: Stage!
+    "The time the document was updated"
+    updatedAt: DateTime!
+    "User that last updated this document"
+    updatedBy(
+        """
+
+        Allows to optionally override locale filtering behaviour in the query's subtree.
+
+        Note that `updatedBy` is a model without localized fields and will not be affected directly by this argument, however the locales will be passed on to any relational fields in the query's subtree for filtering.
+        For related models with localized fields in the query's subtree, the first locale matching the provided list of locales will be returned, entries with non matching locales will be filtered out.
+
+        This argument will overwrite any existing locale filtering defined in the query's tree for the subtree.
+        """
+        locales: [Locale!]
+    ): User
+}
+
+"A connection to a list of items."
+type TagConnection {
+    aggregate: Aggregate!
+    "A list of edges."
+    edges: [TagEdge!]!
+    "Information to aid in pagination."
+    pageInfo: PageInfo!
+}
+
+"An edge in a connection."
+type TagEdge {
+    "A cursor for use in pagination."
+    cursor: String!
+    "The item at the end of the edge."
+    node: Tag!
+}
+
 "User system model"
 type User implements Node {
     "The time the document was created"
@@ -2379,8 +2706,6 @@ enum PostOrderByInput {
     publishedAt_DESC
     slug_ASC
     slug_DESC
-    tags_ASC
-    tags_DESC
     title_ASC
     title_DESC
     updatedAt_ASC
@@ -2475,6 +2800,19 @@ enum SystemDateTimeFieldVariation {
     BASE
     COMBINED
     LOCALIZATION
+}
+
+enum TagOrderByInput {
+    createdAt_ASC
+    createdAt_DESC
+    id_ASC
+    id_DESC
+    name_ASC
+    name_DESC
+    publishedAt_ASC
+    publishedAt_DESC
+    updatedAt_ASC
+    updatedAt_DESC
 }
 
 "System User Kind"
@@ -3947,7 +4285,7 @@ input PostCreateInput {
     excerpt: String
     seo: SeoCreateOneInlineInput
     slug: String!
-    tags: [String!]
+    tags: TagCreateManyInlineInput
     title: String!
     updatedAt: DateTime
 }
@@ -4086,16 +4424,9 @@ input PostManyWhereInput {
     slug_not_starts_with: String
     "All values starting with the given string."
     slug_starts_with: String
-    "Matches if the field array contains *all* items provided to the filter and order does match"
-    tags: [String!]
-    "Matches if the field array contains *all* items provided to the filter"
-    tags_contains_all: [String!]
-    "Matches if the field array does not contain any of the items provided to the filter"
-    tags_contains_none: [String!]
-    "Matches if the field array contains at least one item provided to the filter"
-    tags_contains_some: [String!]
-    "Matches if the field array does not contains *all* items provided to the filter or order does not match"
-    tags_not: [String!]
+    tags_every: TagWhereInput
+    tags_none: TagWhereInput
+    tags_some: TagWhereInput
     title: String
     "All values containing the given string."
     title_contains: String
@@ -4141,7 +4472,7 @@ input PostUpdateInput {
     excerpt: String
     seo: SeoUpdateOneInlineInput
     slug: String
-    tags: [String!]
+    tags: TagUpdateManyInlineInput
     title: String
 }
 
@@ -4166,7 +4497,6 @@ input PostUpdateManyInput {
     content: RichTextAST
     date: Date
     excerpt: String
-    tags: [String!]
     title: String
 }
 
@@ -4333,16 +4663,9 @@ input PostWhereInput {
     slug_not_starts_with: String
     "All values starting with the given string."
     slug_starts_with: String
-    "Matches if the field array contains *all* items provided to the filter and order does match"
-    tags: [String!]
-    "Matches if the field array contains *all* items provided to the filter"
-    tags_contains_all: [String!]
-    "Matches if the field array does not contain any of the items provided to the filter"
-    tags_contains_none: [String!]
-    "Matches if the field array contains at least one item provided to the filter"
-    tags_contains_some: [String!]
-    "Matches if the field array does not contains *all* items provided to the filter or order does not match"
-    tags_not: [String!]
+    tags_every: TagWhereInput
+    tags_none: TagWhereInput
+    tags_some: TagWhereInput
     title: String
     "All values containing the given string."
     title_contains: String
@@ -5591,6 +5914,319 @@ input SeoWhereInput {
 "References Seo record uniquely"
 input SeoWhereUniqueInput {
     id: ID
+}
+
+input TagConnectInput {
+    "Allow to specify document position in list of connected documents, will default to appending at end of list"
+    position: ConnectPositionInput
+    "Document to connect"
+    where: TagWhereUniqueInput!
+}
+
+input TagCreateInput {
+    color: ColorInput
+    createdAt: DateTime
+    name: String!
+    posts: PostCreateManyInlineInput
+    updatedAt: DateTime
+}
+
+input TagCreateManyInlineInput {
+    "Connect multiple existing Tag documents"
+    connect: [TagWhereUniqueInput!]
+    "Create and connect multiple existing Tag documents"
+    create: [TagCreateInput!]
+}
+
+input TagCreateOneInlineInput {
+    "Connect one existing Tag document"
+    connect: TagWhereUniqueInput
+    "Create and connect one Tag document"
+    create: TagCreateInput
+}
+
+"Identifies documents"
+input TagManyWhereInput {
+    "Logical AND on all given filters."
+    AND: [TagWhereInput!]
+    "Logical NOT on all given filters combined by AND."
+    NOT: [TagWhereInput!]
+    "Logical OR on all given filters."
+    OR: [TagWhereInput!]
+    "Contains search across all appropriate fields."
+    _search: String
+    createdAt: DateTime
+    "All values greater than the given value."
+    createdAt_gt: DateTime
+    "All values greater than or equal the given value."
+    createdAt_gte: DateTime
+    "All values that are contained in given list."
+    createdAt_in: [DateTime!]
+    "All values less than the given value."
+    createdAt_lt: DateTime
+    "All values less than or equal the given value."
+    createdAt_lte: DateTime
+    "All values that are not equal to given value."
+    createdAt_not: DateTime
+    "All values that are not contained in given list."
+    createdAt_not_in: [DateTime!]
+    createdBy: UserWhereInput
+    id: ID
+    "All values containing the given string."
+    id_contains: ID
+    "All values ending with the given string."
+    id_ends_with: ID
+    "All values that are contained in given list."
+    id_in: [ID!]
+    "All values that are not equal to given value."
+    id_not: ID
+    "All values not containing the given string."
+    id_not_contains: ID
+    "All values not ending with the given string"
+    id_not_ends_with: ID
+    "All values that are not contained in given list."
+    id_not_in: [ID!]
+    "All values not starting with the given string."
+    id_not_starts_with: ID
+    "All values starting with the given string."
+    id_starts_with: ID
+    name: String
+    "All values containing the given string."
+    name_contains: String
+    "All values ending with the given string."
+    name_ends_with: String
+    "All values that are contained in given list."
+    name_in: [String!]
+    "All values that are not equal to given value."
+    name_not: String
+    "All values not containing the given string."
+    name_not_contains: String
+    "All values not ending with the given string"
+    name_not_ends_with: String
+    "All values that are not contained in given list."
+    name_not_in: [String!]
+    "All values not starting with the given string."
+    name_not_starts_with: String
+    "All values starting with the given string."
+    name_starts_with: String
+    posts_every: PostWhereInput
+    posts_none: PostWhereInput
+    posts_some: PostWhereInput
+    publishedAt: DateTime
+    "All values greater than the given value."
+    publishedAt_gt: DateTime
+    "All values greater than or equal the given value."
+    publishedAt_gte: DateTime
+    "All values that are contained in given list."
+    publishedAt_in: [DateTime!]
+    "All values less than the given value."
+    publishedAt_lt: DateTime
+    "All values less than or equal the given value."
+    publishedAt_lte: DateTime
+    "All values that are not equal to given value."
+    publishedAt_not: DateTime
+    "All values that are not contained in given list."
+    publishedAt_not_in: [DateTime!]
+    publishedBy: UserWhereInput
+    scheduledIn_every: ScheduledOperationWhereInput
+    scheduledIn_none: ScheduledOperationWhereInput
+    scheduledIn_some: ScheduledOperationWhereInput
+    updatedAt: DateTime
+    "All values greater than the given value."
+    updatedAt_gt: DateTime
+    "All values greater than or equal the given value."
+    updatedAt_gte: DateTime
+    "All values that are contained in given list."
+    updatedAt_in: [DateTime!]
+    "All values less than the given value."
+    updatedAt_lt: DateTime
+    "All values less than or equal the given value."
+    updatedAt_lte: DateTime
+    "All values that are not equal to given value."
+    updatedAt_not: DateTime
+    "All values that are not contained in given list."
+    updatedAt_not_in: [DateTime!]
+    updatedBy: UserWhereInput
+}
+
+input TagUpdateInput {
+    color: ColorInput
+    name: String
+    posts: PostUpdateManyInlineInput
+}
+
+input TagUpdateManyInlineInput {
+    "Connect multiple existing Tag documents"
+    connect: [TagConnectInput!]
+    "Create and connect multiple Tag documents"
+    create: [TagCreateInput!]
+    "Delete multiple Tag documents"
+    delete: [TagWhereUniqueInput!]
+    "Disconnect multiple Tag documents"
+    disconnect: [TagWhereUniqueInput!]
+    "Override currently-connected documents with multiple existing Tag documents"
+    set: [TagWhereUniqueInput!]
+    "Update multiple Tag documents"
+    update: [TagUpdateWithNestedWhereUniqueInput!]
+    "Upsert multiple Tag documents"
+    upsert: [TagUpsertWithNestedWhereUniqueInput!]
+}
+
+input TagUpdateManyInput {
+    color: ColorInput
+}
+
+input TagUpdateManyWithNestedWhereInput {
+    "Update many input"
+    data: TagUpdateManyInput!
+    "Document search"
+    where: TagWhereInput!
+}
+
+input TagUpdateOneInlineInput {
+    "Connect existing Tag document"
+    connect: TagWhereUniqueInput
+    "Create and connect one Tag document"
+    create: TagCreateInput
+    "Delete currently connected Tag document"
+    delete: Boolean
+    "Disconnect currently connected Tag document"
+    disconnect: Boolean
+    "Update single Tag document"
+    update: TagUpdateWithNestedWhereUniqueInput
+    "Upsert single Tag document"
+    upsert: TagUpsertWithNestedWhereUniqueInput
+}
+
+input TagUpdateWithNestedWhereUniqueInput {
+    "Document to update"
+    data: TagUpdateInput!
+    "Unique document search"
+    where: TagWhereUniqueInput!
+}
+
+input TagUpsertInput {
+    "Create document if it didn't exist"
+    create: TagCreateInput!
+    "Update document if it exists"
+    update: TagUpdateInput!
+}
+
+input TagUpsertWithNestedWhereUniqueInput {
+    "Upsert data"
+    data: TagUpsertInput!
+    "Unique document search"
+    where: TagWhereUniqueInput!
+}
+
+"Identifies documents"
+input TagWhereInput {
+    "Logical AND on all given filters."
+    AND: [TagWhereInput!]
+    "Logical NOT on all given filters combined by AND."
+    NOT: [TagWhereInput!]
+    "Logical OR on all given filters."
+    OR: [TagWhereInput!]
+    "Contains search across all appropriate fields."
+    _search: String
+    createdAt: DateTime
+    "All values greater than the given value."
+    createdAt_gt: DateTime
+    "All values greater than or equal the given value."
+    createdAt_gte: DateTime
+    "All values that are contained in given list."
+    createdAt_in: [DateTime!]
+    "All values less than the given value."
+    createdAt_lt: DateTime
+    "All values less than or equal the given value."
+    createdAt_lte: DateTime
+    "All values that are not equal to given value."
+    createdAt_not: DateTime
+    "All values that are not contained in given list."
+    createdAt_not_in: [DateTime!]
+    createdBy: UserWhereInput
+    id: ID
+    "All values containing the given string."
+    id_contains: ID
+    "All values ending with the given string."
+    id_ends_with: ID
+    "All values that are contained in given list."
+    id_in: [ID!]
+    "All values that are not equal to given value."
+    id_not: ID
+    "All values not containing the given string."
+    id_not_contains: ID
+    "All values not ending with the given string"
+    id_not_ends_with: ID
+    "All values that are not contained in given list."
+    id_not_in: [ID!]
+    "All values not starting with the given string."
+    id_not_starts_with: ID
+    "All values starting with the given string."
+    id_starts_with: ID
+    name: String
+    "All values containing the given string."
+    name_contains: String
+    "All values ending with the given string."
+    name_ends_with: String
+    "All values that are contained in given list."
+    name_in: [String!]
+    "All values that are not equal to given value."
+    name_not: String
+    "All values not containing the given string."
+    name_not_contains: String
+    "All values not ending with the given string"
+    name_not_ends_with: String
+    "All values that are not contained in given list."
+    name_not_in: [String!]
+    "All values not starting with the given string."
+    name_not_starts_with: String
+    "All values starting with the given string."
+    name_starts_with: String
+    posts_every: PostWhereInput
+    posts_none: PostWhereInput
+    posts_some: PostWhereInput
+    publishedAt: DateTime
+    "All values greater than the given value."
+    publishedAt_gt: DateTime
+    "All values greater than or equal the given value."
+    publishedAt_gte: DateTime
+    "All values that are contained in given list."
+    publishedAt_in: [DateTime!]
+    "All values less than the given value."
+    publishedAt_lt: DateTime
+    "All values less than or equal the given value."
+    publishedAt_lte: DateTime
+    "All values that are not equal to given value."
+    publishedAt_not: DateTime
+    "All values that are not contained in given list."
+    publishedAt_not_in: [DateTime!]
+    publishedBy: UserWhereInput
+    scheduledIn_every: ScheduledOperationWhereInput
+    scheduledIn_none: ScheduledOperationWhereInput
+    scheduledIn_some: ScheduledOperationWhereInput
+    updatedAt: DateTime
+    "All values greater than the given value."
+    updatedAt_gt: DateTime
+    "All values greater than or equal the given value."
+    updatedAt_gte: DateTime
+    "All values that are contained in given list."
+    updatedAt_in: [DateTime!]
+    "All values less than the given value."
+    updatedAt_lt: DateTime
+    "All values less than or equal the given value."
+    updatedAt_lte: DateTime
+    "All values that are not equal to given value."
+    updatedAt_not: DateTime
+    "All values that are not contained in given list."
+    updatedAt_not_in: [DateTime!]
+    updatedBy: UserWhereInput
+}
+
+"References Tag record uniquely"
+input TagWhereUniqueInput {
+    id: ID
+    name: String
 }
 
 input UnpublishLocaleInput {

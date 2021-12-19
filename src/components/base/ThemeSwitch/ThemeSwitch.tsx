@@ -2,14 +2,14 @@ import React, { useCallback, useMemo } from "react";
 
 import { SwitchProps } from "@mui/material";
 
-import useThemeContext from "@/providers/Theme/useThemeContext";
+import useTheme from "@/providers/Theme/useTheme";
 
 import { MuiThemeSwitch } from "./styles";
 
 type Props = Omit<SwitchProps, "checked" | "onChange">;
 
 const ThemeSwitch: React.VFC<Props> = (props) => {
-  const { toggleColorMode, theme } = useThemeContext();
+  const { toggleColorMode, theme } = useTheme();
 
   const changeTheme = useCallback(() => {
     toggleColorMode();

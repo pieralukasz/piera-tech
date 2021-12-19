@@ -1,9 +1,26 @@
 import gql from "graphql-tag";
 
+export const GET_ALL_TAGS_QUERY = gql`
+  query GetAllTags {
+    tags {
+      name
+    }
+  }
+`;
+
 export const ALL_POSTS_WITH_SLUG_QUERY = gql`
   query GetAllPostsWithSlug {
     posts {
+      title
       slug
+      createdAt
+      tags {
+        name
+      }
+      content {
+        html
+        raw
+      }
     }
   }
 `;

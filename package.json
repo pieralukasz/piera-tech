@@ -7,11 +7,14 @@
     "start": "next start",
     "lint": "next lint",
     "test": "jest",
+    "test:coverage": "jest --collectCoverage",
     "type-check": "tsc",
     "format": "prettier --write \"**/*.+(ts|js|tsx|json)\" ",
     "codegen": "graphql-codegen --config codegen.yml && npm run format",
     "bundle:analyzer": "BUNDLE=true npm run build",
-    "check:circular-deps": "madge --warning --circular --extensions ts,tsx src"
+    "check:circular-deps": "madge --warning --circular --extensions ts,tsx src",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   },
   "dependencies": {
     "@apollo/client": "^3.5.5",
@@ -31,11 +34,17 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
+    "@babel/core": "^7.16.0",
     "@graphql-codegen/cli": "^2.3.0",
     "@graphql-codegen/near-operation-file-preset": "^2.2.2",
     "@graphql-codegen/typescript": "^2.4.1",
     "@graphql-codegen/typescript-operations": "^2.2.1",
     "@next/bundle-analyzer": "^12.0.4",
+    "@storybook/addon-a11y": "^6.4.0",
+    "@storybook/addon-actions": "^6.4.0",
+    "@storybook/addon-essentials": "^6.4.0",
+    "@storybook/addon-links": "^6.4.0",
+    "@storybook/react": "^6.4.0",
     "@testing-library/jest-dom": "^5.15.1",
     "@testing-library/react": "^12.1.2",
     "@testing-library/react-hooks": "^7.0.2",
@@ -47,6 +56,8 @@
     "@types/uuid": "^8.3.3",
     "@typescript-eslint/eslint-plugin": "^5.4.0",
     "@typescript-eslint/parser": "^5.4.0",
+    "babel-loader": "^8.2.3",
+    "emotion-theming": "^11.0.0",
     "eslint": "7",
     "eslint-config-next": "12.0.4",
     "eslint-config-prettier": "^8.3.0",
@@ -55,6 +66,8 @@
     "madge": "^5.0.1",
     "msw": "^0.35.0",
     "prettier": "^2.4.1",
+    "storybook-addon-mui-mode": "0.0.14",
+    "storybook-addon-next-router": "^3.1.0",
     "typescript": "4.5.2"
   },
   "madge": {

@@ -1,7 +1,7 @@
 import { GetServerSideProps, NextPage } from "next";
 import { Typography } from "@mui/material";
 
-import { Layout } from "@/components/Layout";
+import { Page } from "@/components/layout/Page";
 
 interface Props {
   preview: boolean;
@@ -11,9 +11,9 @@ const About: NextPage<Props> = (props) => {
   const { preview } = props;
 
   return (
-    <Layout preview={preview}>
+    <Page preview={preview}>
       <Typography>ABOUT PAGE</Typography>
-    </Layout>
+    </Page>
   );
 };
 

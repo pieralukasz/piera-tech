@@ -1,13 +1,27 @@
 /* eslint no-shadow: 0 */
 import * as Types from "../../types/generated/types";
 
+export type GetAllTagsQueryVariables = Types.Exact<{ [key: string]: never }>;
+
+export type GetAllTagsQuery = {
+  __typename?: "Query";
+  tags: Array<{ __typename?: "Tag"; name: string }>;
+};
+
 export type GetAllPostsWithSlugQueryVariables = Types.Exact<{
   [key: string]: never;
 }>;
 
 export type GetAllPostsWithSlugQuery = {
   __typename?: "Query";
-  posts: Array<{ __typename?: "Post"; slug: string }>;
+  posts: Array<{
+    __typename?: "Post";
+    title: string;
+    slug: string;
+    createdAt: any;
+    tags: Array<{ __typename?: "Tag"; name: string }>;
+    content: { __typename?: "RichText"; html: string; raw: any };
+  }>;
 };
 
 export type PostBySlugQueryVariables = Types.Exact<{
