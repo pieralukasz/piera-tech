@@ -1,8 +1,6 @@
 import React from "react";
-import { Container } from "@mui/material";
 
-import { PreviewHeader } from "@/components/layout/PreviewHeader";
-import { AppShell } from "@/components/layout/AppShell";
+import { PreviewHeader } from "@/components/headers/preview-header";
 
 interface Props {
   preview: boolean;
@@ -14,8 +12,7 @@ const Page: React.FC<Props> = (props) => {
   return (
     <>
       {preview && <PreviewHeader />}
-      <AppShell />
-      <Container>{children}</Container>
+      {children}
     </>
   );
 };

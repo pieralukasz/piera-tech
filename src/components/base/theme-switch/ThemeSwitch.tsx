@@ -2,7 +2,7 @@ import React, { useCallback, useMemo } from "react";
 
 import { SwitchProps } from "@mui/material";
 
-import useTheme from "@/providers/Theme/useTheme";
+import { useTheme } from "@/hooks/useTheme/useTheme";
 
 import { MuiThemeSwitch } from "./styles";
 

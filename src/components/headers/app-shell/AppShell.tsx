@@ -12,7 +12,7 @@ import {
 
 import MenuIcon from "@mui/icons-material/Menu";
 
-import { ThemeSwitch } from "@/components/base/ThemeSwitch";
+import { ThemeSwitch } from "@/components/base/theme-switch";
 
 import { AppBar, Link, LogoDesktop, LogoMobile, MenuLink } from "./styles";
 

@@ -1,9 +1,9 @@
 import React, { useMemo } from "react";
 import * as NextImage from "next/image";
 
-import { RouterContext } from "next/dist/shared/lib/router-context";
+import { MemoryRouterProvider } from "next-router-mock/MemoryRouterProvider";
 
-import { createDefaultTheme } from "../src/common/theme/theme";
+import { createDefaultTheme } from "../src/common/theme";
 import { ThemeProvider as EmotionThemeProvider } from "emotion-theming";
 
 import ThemeProvider from "../src/providers/Theme/ThemeProvider";
@@ -17,7 +17,9 @@ const withThemeProvider = (Story, context) => {
   return (
     <EmotionThemeProvider theme={theme}>
       <ThemeProvider initialTheme={theme}>
-        <Story {...context} />
+        <MemoryRouterProvider url="/">
+          <Story {...context} />
+        </MemoryRouterProvider>
       </ThemeProvider>
     </EmotionThemeProvider>
   );
@@ -32,9 +34,6 @@ export const parameters = {
       color: /(background|color)$/i,
       date: /Date$/,
     },
-  },
-  nextRouter: {
-    Provider: RouterContext.Provider,
   },
 };
 

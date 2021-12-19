@@ -1,6 +1,6 @@
 import { styled, AppBar as MuiAppBar, Typography } from "@mui/material";
 
-import { Link as NextLink } from "@/components/base/Link";
+import { Link as NextLink } from "@/components/base/link";
 import { PINK } from "@/common/colors";
 
 export const AppBar = styled(MuiAppBar)`

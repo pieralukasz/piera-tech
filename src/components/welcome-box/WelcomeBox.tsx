@@ -2,19 +2,20 @@ import React from "react";
 import Image from "next/image";
 import { Box, Button, Grid, Typography } from "@mui/material";
 
-import GeeMee from "../../../../public/gee_me_001.svg";
-import { Link } from "@/components/base/Link";
+import GeeMee from "../../../public/gee_me_001.svg";
+import { Link } from "@/components/base/link";
 import Path from "@/types/enums/Path";
 
-const WelcomeHeader: React.VFC = () => {
+const WelcomeBox: React.VFC = () => {
   return (
-    <Grid container display="flex" sx={{ height: "40vh" }}>
+    <Grid container display="flex" sx={{ height: "40%" }}>
+      <Grid item xs={2} />
       <Grid
         item
         alignItems="center"
         justifyContent="center"
         sx={{ display: "flex" }}
-        xs={7}
+        xs={5}
       >
         <Box>
           <Typography variant="h1">Hello, happy Journey!</Typography>
@@ -45,17 +46,17 @@ const WelcomeHeader: React.VFC = () => {
       </Grid>
       <Grid
         item
-        xs={5}
+        xs={4}
         justifyContent="center"
         alignItems="center"
         sx={{
           display: "flex",
         }}
       >
-        <Image height="400" src={GeeMee} alt="simpson" />
+        <Image width={300} height={300} src={GeeMee} alt="simpson" />
       </Grid>
     </Grid>
   );
 };
 
-export { WelcomeHeader };
+export { WelcomeBox };

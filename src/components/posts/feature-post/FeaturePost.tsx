@@ -7,8 +7,11 @@ import {
   ChipProps,
   Typography,
 } from "@mui/material";
-import { Tag } from "@/components/base/Tag/Tag";
-import { useTime } from "@/hooks/useTime/useTime";
+
+import { GroupTags } from "@/components/tags";
+
+import { useTime } from "@/hooks/useTime";
+import { useTheme } from "@/hooks/useTheme";
 
 interface Props {
   title: string;
@@ -19,33 +22,36 @@ interface Props {
 }
 
 const FeaturePost: React.VFC<Props> = (props) => {
+  const { mode, theme } = useTheme();
+
   const { title, date, tags, content, description } = props;
 
   const { text: timeText } = useTime({ content, locale: "EN" });
 
   return (
     <Card>
-      <CardContent component={Box} sx={{ padding: 4 }}>
-        <div>
-          {tags.map(({ label }, index) => (
-            <Tag
-              sx={{ marginRight: 1 }}
-              key={`${label}_${index}`}
-              label={label}
-            />
-          ))}
-        </div>
-        <Typography sx={{ marginTop: 2 }} variant="h2">
+      <CardContent
+        component={Box}
+        sx={{
+          p: 4,
+          backgroundColor:
+            mode === "light"
+              ? theme.palette.grey["200"]
+              : theme.palette.grey["900"],
+        }}
+      >
+        <GroupTags tags={tags} />
+        <Typography sx={{ mt: 2 }} variant="h2">
           {title}
         </Typography>
-        <Typography sx={{ marginTop: 1, color: "gray" }}>
+        <Typography sx={{ mt: 1, color: "gray" }}>
           {date} - {timeText}
         </Typography>
-        <Typography sx={{ marginTop: 1 }}>
+        <Typography sx={{ mt: 1 }}>
           {description}
           {"..."}
         </Typography>
-        <Button variant="contained" sx={{ marginTop: 2 }}>
+        <Button variant="contained" sx={{ mt: 2 }}>
           Read
         </Button>
       </CardContent>

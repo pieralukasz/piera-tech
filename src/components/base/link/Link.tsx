@@ -3,7 +3,7 @@ import NextLink from "next/link";
 
 import { LinkProps as NextLinkProps } from "next/dist/client/link";
 
-import { Anchor } from "@/components/base/Link/styles";
+import { Anchor } from "./styles";
 
 export interface NextLinkComposedProps
   extends Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, "href">,

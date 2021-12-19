@@ -6,16 +6,19 @@ import {
   ThemeProvider as MuiThemeProvider,
 } from "@mui/material";
 
-import { createDefaultTheme } from "@/common/theme/theme";
+import { createDefaultTheme } from "@/common/theme";
 
 export interface ThemeContextValue {
+  mode: PaletteMode;
   theme: Theme;
   toggleColorMode(): void;
 }
 
-export const ThemeContext = createContext<ThemeContextValue | undefined>(
-  undefined
-);
+export const ThemeContext = createContext<ThemeContextValue>({
+  mode: "light",
+  theme: createDefaultTheme("light"),
+  toggleColorMode() {},
+});
 
 interface ThemeProviderProps {
   initialTheme?: Theme;
@@ -37,10 +40,11 @@ const ThemeProvider: React.FC<ThemeProviderProps> = (props) => {
 
   const value = useMemo(
     (): ThemeContextValue => ({
+      mode,
       theme,
       toggleColorMode,
     }),
-    [theme, toggleColorMode]
+    [mode, theme, toggleColorMode]
   );
 
   return (
